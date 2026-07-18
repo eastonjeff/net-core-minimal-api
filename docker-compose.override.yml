@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  minimal-api:
+    build:
+      context: ./net-core-minimal-api  
+      dockerfile: Dockerfile
+      args:
+        # Instructs the Dockerfile to compile in Debug mode locally
+        - BUILD_CONFIGURATION=Debug
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    # Map your local source code directly into the container so the debugger 
+    # can easily map your breakpoints to the executing code files in real-time
+    volumes:
+      - ./net-core-minimal-api:/net-core-minimal-api

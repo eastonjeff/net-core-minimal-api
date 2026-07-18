@@ -7,9 +7,12 @@ WORKDIR /src
 COPY *.csproj ./
 RUN dotnet restore
 
+# Dynamic build configuration argument (defaults to Release)
+ARG BUILD_CONFIGURATION=Release
+
 # Copy the rest of your application code and build it
 COPY . ./
-RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish -c ${BUILD_CONFIGURATION} -o /app/publish /p:UseAppHost=false
 
 # --- Stage 2: Final Runtime ---
 # Uses the ultra-lean ASP.NET Core 10 runtime image

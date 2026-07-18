@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>net_core_minimal_api</RootNamespace>
+    <UserSecretsId>76f83d1b-11af-4c28-a978-510038d56a93</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

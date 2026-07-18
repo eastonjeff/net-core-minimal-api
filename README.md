@@ -54,7 +54,7 @@ docker compose up --build -d
 
 This will pull the images for pgadmin, net10 runtime & postgres & use the docker compose override file. 
 
-NOTE: if wanting to do a release, simple force docker compose to run without the override. 
+NOTE: if wanting to do a release, simply force docker compose to run without the override. 
 
 ```
 docker compose -f docker-compose.yml up -d --build

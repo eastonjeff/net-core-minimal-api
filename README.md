@@ -25,9 +25,9 @@ If not, follow these steps:
 1. Open powershell and run: wsl --shutdown
 2. Reopen Docker Desktop and go to settings > Resources > WSL Integration. Enable integration with your Linux distribution.
 
-## Environment
+# Local Environment
 
-## Create an SSL Certificate For Use In API Container
+## Create a Local SSL Certificate For Use In API Container
 
 ```
 dotnet dev-certs https --trust
@@ -38,9 +38,9 @@ dotnet dev-certs https -ep "$env:USERPROFILE\.aspnet\https\aspnetapp.pfx" -p "Yo
 
 Open the .env.template and follow the instructions to create a .env file. This file will be used to configure the database connection string and other environment variables. 
 
-These environment variables are used in the docker-compose.yml file to configure the database connection string and other settings.
+These environment variables are used in the docker-compose.yml file to configure the database connection string, cert path and other settings.
 
-# Run Locally (Docker Compose)
+# Run API Locally (Docker Compose)
 
 ```
 docker compose up -d
@@ -52,7 +52,7 @@ OR (if making changes & need to rebuild)
 docker compose up --build -d
 ```
 
-This will pull the images for pgadmin, net10 runtime & postgres & use the docker compose override file. 
+This will pull the images for pgadmin, net10 runtime & postgres, build the project & use the docker compose override file. 
 
 NOTE: if wanting to do a release, simply force docker compose to run without the override. 
 

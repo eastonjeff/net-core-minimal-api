@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres-db:
+    image: postgres:17-alpine
+    container_name: net10_postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - api-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # pgAdmin 
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: net10_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres-db
+    networks:
+      - api-network
+
+  # .NET 10 Minimal API
+  minimal-api:
+    image: net10-minimal-api:latest
+    container_name: net10_api
+    build:
+      context: ./net-core-minimal-api         
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      # Tell .NET to listen on port 8081 for HTTPS
+      - ASPNETCORE_URLS=https://+:8081
+      # Point .NET to where the certificate is mounted inside the container
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${CERT_PASSWORD}
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ConnectionStrings__DefaultConnection=Host=postgres-db;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};
+    ports:
+      # Map your local port 5001 to the container's HTTPS port 8081
+      - "5001:8081"
+    volumes:
+      # Mount the local certificate folder. 
+      - ${USERPROFILE_PATH_WIN}:/https:ro
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+    networks:
+      - api-network
+
+volumes:
+  postgres_data:
+
+networks:
+  api-network:
+    driver: bridge

@@ -1,6 +1,6 @@
 # net-core-minimal-api
 
-Minimal API using Net 10, EntityFramework, Docker, pgAdmin & PostgreSQL. 
+Minimal API using Net 10, Entity Framework, Docker, pgAdmin & PostgreSQL. 
 
 Follow the instructions in this file to set up your local environment for development & debugging. 
 

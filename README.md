@@ -116,9 +116,9 @@ docker compose build --no-cache
 docker compose up -d
 ```
 
-This will pull the images for pgadmin, net10 runtime & postgres, build the project & use the docker compose override file. 
+This will pull the images for pgadmin, net10 runtime & postgres, build the project, create & launch the containers & use the docker compose override file to ensure the project is built using Debug configuration. 
 
-NOTE: if wanting to do a release, simply force docker compose to run without the override, which will default to RELEASE built configuration.
+NOTE: if wanting to do a release, simply force docker compose to run without the override, which will default to Release build configuration.
 
 ```
 docker compose -f docker-compose.yml up -d --build
@@ -134,7 +134,7 @@ Open Docker Desktop & find the 'net-core-minimal-api' compose stack. It should h
 
 The API Dockerfile supports a runtime argument (BUILD_CONFIGURATION), which defaults to Release.
 
-The docker-compose.override.yml file will override this argument to use the Debug build. 
+The docker-compose.override.yml file will override this argument to use the Debug build, which will enable clean debugging. 
 
 When your local API container is running:
 

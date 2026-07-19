@@ -1,6 +1,6 @@
 # net-core-minimal-api
 
-Minimal API using Net 10, Docker, pgAdmin & PostgreSQL
+Minimal API using Net 10, EntityFramework, Docker, pgAdmin & PostgreSQL
 
 # Infrastructure & Tooling
 

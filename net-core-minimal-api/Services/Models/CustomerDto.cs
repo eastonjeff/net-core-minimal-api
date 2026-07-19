@@ -2,11 +2,11 @@
 
 namespace net_core_minimal_api.Services.Models
 {
-    public class CustomerDto
+    public class CustomerDTO
     {
-        public CustomerDto() { }
+        public CustomerDTO() { }
 
-        public CustomerDto(Customer customer)
+        public CustomerDTO(Customer customer)
         {
             Id = customer.Id;
             FirstName = customer.FirstName;

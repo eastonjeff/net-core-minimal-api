@@ -1,8 +1,9 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using net_core_minimal_api.Data;
-using net_core_minimal_api.Services;
+using net_core_minimal_api.Services.Endpoints;
 using net_core_minimal_api.Services.Models;
+using net_core_minimal_api.Services.Repositories;
 using net_core_minimal_api.Services.Validators;
 using Scalar.AspNetCore;
 
@@ -31,21 +32,14 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    //using this over Swagger
+    // Using this over swagger or default endpoint explorer
     // Accessible at /scalar
     app.MapScalarApiReference(); 
 }
 
 app.UseHttpsRedirection();
 
-
-app.MapGet("/customers", async ([AsParameters] GetCustomersQuery query, ICustomerRepository customerRepository) =>
-{
-    var customers = await customerRepository.GetCustomersAsync(query);
-    var dtoCustomers = customers.Select(x => new CustomerDto(x));
-    return Results.Ok(dtoCustomers);
-})
-.AddEndpointFilter<ValidationFilter<GetCustomersQuery>>()
-.WithName("GetCustomers");
+//See Services/Endpoints for entity based routes & handlers
+app.MapUserEndpoints();
 
 app.Run();

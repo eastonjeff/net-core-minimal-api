@@ -1,7 +1,7 @@
 ﻿using net_core_minimal_api.Data.Models;
 using net_core_minimal_api.Services.Models;
 
-namespace net_core_minimal_api.Services
+namespace net_core_minimal_api.Services.Repositories
 {
     public interface ICustomerRepository
     {

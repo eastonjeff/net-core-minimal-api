@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace net_core_minimal_api.Data
+namespace net_core_minimal_api.Data.Models
 {
     [Table("Customers")]
     public class Customer
@@ -12,11 +12,11 @@ namespace net_core_minimal_api.Data
 
         [Required]
         [StringLength(50)]
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = "";
 
         [Required]
         [StringLength(50)]
-        public string LastName { get; set; }
+        public string LastName { get; set; } = "";
 
     }
 }

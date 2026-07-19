@@ -94,6 +94,13 @@ OR (if making changes & need to rebuild)
 docker compose up --build -d
 ```
 
+OR (if added a nuget package)
+
+```
+docker compose build --no-cache
+docker compose up -d
+```
+
 This will pull the images for pgadmin, net10 runtime & postgres, build the project & use the docker compose override file. 
 
 NOTE: if wanting to do a release, simply force docker compose to run without the override. 

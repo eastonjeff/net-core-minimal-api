@@ -1,0 +1,14 @@
+﻿using net_core_minimal_api.Data.Models;
+using net_core_minimal_api.Services.Models;
+
+namespace net_core_minimal_api.Services
+{
+    public interface ICustomerRepository
+    {
+        Task<Customer> CreateAsync(Customer customer);
+        Task<Customer> UpdateAsync(Customer customer);
+        Task DeleteAsync(int id);
+        Task<Customer> GetAsync(int id);
+        Task<IReadOnlyCollection<Customer>> GetCustomersAsync(GetCustomersQuery input);
+    }
+}

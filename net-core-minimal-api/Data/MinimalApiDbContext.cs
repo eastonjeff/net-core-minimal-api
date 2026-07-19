@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using net_core_minimal_api.Data.Models;
 
 namespace net_core_minimal_api.Data
 {

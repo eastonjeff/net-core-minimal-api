@@ -1,13 +1,27 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using net_core_minimal_api.Data;
+using net_core_minimal_api.Services;
+using net_core_minimal_api.Services.Models;
+using net_core_minimal_api.Services.Validators;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+// Register services for DI
+
+// DB
 builder.Services.AddDbContext<MinimalApiDbContext>(options =>
     options.UseNpgsql(connectionString));
+
+// Validators
+// ValidationFilters are constructed with the IValidator<T> interface
+builder.Services.AddScoped<IValidator<GetCustomersQuery>, GetCustomersQueryValidator>();
+
+// Repositories
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -26,28 +40,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
 
-app.MapGet("/weatherforecast", () =>
+app.MapGet("/customers", async ([AsParameters] GetCustomersQuery query, ICustomerRepository customerRepository) =>
 {
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
+    var customers = await customerRepository.GetCustomersAsync(query);
+    return Results.Ok(customers);
 })
-.WithName("GetWeatherForecast");
+.AddEndpointFilter<ValidationFilter<GetCustomersQuery>>()
+.WithName("GetCustomers");
 
 app.Run();
-
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

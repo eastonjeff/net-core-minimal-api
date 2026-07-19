@@ -10,8 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// Register services for DI
-
+// Register services
 // DB
 builder.Services.AddDbContext<MinimalApiDbContext>(options =>
     options.UseNpgsql(connectionString));
@@ -23,7 +22,6 @@ builder.Services.AddScoped<IValidator<GetCustomersQuery>, GetCustomersQueryValid
 // Repositories
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
-// Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -44,12 +42,7 @@ app.UseHttpsRedirection();
 app.MapGet("/customers", async ([AsParameters] GetCustomersQuery query, ICustomerRepository customerRepository) =>
 {
     var customers = await customerRepository.GetCustomersAsync(query);
-    var dtoCustomers = customers.Select(x => new CustomerDto()
-    {
-        Id = x.Id,
-        FirstName = x.FirstName,
-        LastName = x.LastName
-    });
+    var dtoCustomers = customers.Select(x => new CustomerDto(x));
     return Results.Ok(dtoCustomers);
 })
 .AddEndpointFilter<ValidationFilter<GetCustomersQuery>>()

@@ -15,7 +15,7 @@ Follow the instructions in this file to set up your local environment for develo
 	- Dockerfile: defines the image & startup cmd
 	- /Data folder: contains the dbContext & data models 
 	- /Migrations folder: contains entity framework generated migrations & snapshots
-	- /Services: repositories & endpoint validators
+	- /Services: repositories, DTO (data transfer object) models & endpoint validators
 
 # Infrastructure & Tooling
 

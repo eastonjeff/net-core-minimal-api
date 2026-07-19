@@ -51,7 +51,7 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
       - ConnectionStrings__DefaultConnection=Host=postgres-db;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};
     ports:
-      # Map your local port 5001 to the container's HTTPS port 8081
+      # Map local port 5001 to the container's HTTPS port 8081
       - "5001:8081"
     volumes:
       # Mount the local certificate folder. 

@@ -40,6 +40,48 @@ Open the .env.template and follow the instructions to create a .env file. This f
 
 These environment variables are used in the docker-compose.yml file to configure the database connection string, cert path and other settings.
 
+# Entity Framework & Initial Migrations
+
+IMPORTANT: Be sure to run your dotnet ef commands from the root of the project (not the solution)
+
+## Install The DotNet EF Tool Globally
+
+```
+dotnet tool install --global dotnet-ef
+```
+
+## Creating The Database
+
+Running Entity Framework migrations requires a valid connection string in appsettings.json or user secrets. 
+
+We don't want connection strings hardcoded in appsettings.json, since usernames/passwords will leak into source control. Use user secrets to store your local overrides.
+
+1. With your PostgreSQL DB & pgAdmin running in docker, open pgAdmin & register your server using the connection information from the docker compose / .env files.
+	- NOTE: docker network db hostname is postgres-db which is what you should use when registering the server in pgAdmin (because pgAdmin is running in the docker network!)
+2. Right click on the net-core-minimal-api project and select 'Manage User Secrets'
+3. Copy the connection strings section from appsettings.json & replace secrets with the actual values (reference your .env file from above).
+4. Use localhost for your db server name while running outside of the docker network
+5. Update the database using the following command:
+
+```
+dotnet ef database update
+```
+
+6. Refresh the database in pgAdmin
+7. Confirm the database has been created
+
+## Creating A New Migration
+
+```
+dotnet ef migrations add YourMigrationName
+```
+
+## Updating Your Database
+
+```
+dotnet ef database update
+```
+
 # Run API Locally (Docker Compose)
 
 ```

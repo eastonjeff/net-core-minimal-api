@@ -1,6 +1,21 @@
 # net-core-minimal-api
 
-Minimal API using Net 10, EntityFramework, Docker, pgAdmin & PostgreSQL
+Minimal API using Net 10, EntityFramework, Docker, pgAdmin & PostgreSQL. 
+
+Follow the instructions in this file to set up your local environment for development & debugging. 
+
+# File Structure
+
+- Solution: ./
+	- .env.template: used to create a local .env file for storing local (git ignored) secrets used in docker processes
+	- docker-compose.yml: creates the network & images for back-end stack & local tooling
+	- docker-compose.override.yml: used for running & building the project in DEBUG mode
+- API Project: ./net-core-minimal-api
+	- Program.cs: entry point for the net core API, dependency registration, endpoint registration, etc.
+	- Dockerfile: defines the image & startup cmd
+	- /Data folder: contains the dbContext & data models 
+	- /Migrations folder: contains entity framework generated migrations & snapshots
+	- /Services: repositories & endpoint validators
 
 # Infrastructure & Tooling
 
@@ -36,9 +51,9 @@ dotnet dev-certs https -ep "$env:USERPROFILE\.aspnet\https\aspnetapp.pfx" -p "Yo
 
 ## Update Local .env
 
-Open the .env.template and follow the instructions to create a .env file. This file will be used to configure the database connection string and other environment variables. 
+Open the .env.template and follow the instructions to create a .env file. This file will be used to configure the database connection string and other environment variables when images are built & run. 
 
-These environment variables are used in the docker-compose.yml file to configure the database connection string, cert path and other settings.
+These environment variables are used in the docker-compose.yml file to set the database connection string, cert path and other settings.
 
 # Entity Framework & Initial Migrations
 
@@ -52,7 +67,7 @@ dotnet tool install --global dotnet-ef
 
 ## Creating The Database
 
-Running Entity Framework migrations requires a valid connection string in appsettings.json or user secrets. 
+Running Entity Framework migrations via the dotnet command line requires a valid connection string in appsettings.json or user secrets. 
 
 We don't want connection strings hardcoded in appsettings.json, since usernames/passwords will leak into source control. Use user secrets to store your local overrides.
 
@@ -68,7 +83,7 @@ dotnet ef database update
 ```
 
 6. Refresh the database in pgAdmin
-7. Confirm the database has been created
+7. Confirm the database has been created by logging into pgAdmin & exploring its schema
 
 ## Creating A New Migration
 
@@ -94,7 +109,7 @@ OR (if making changes & need to rebuild)
 docker compose up --build -d
 ```
 
-OR (if added a nuget package)
+OR (if added a nuget package & need a cache refresh)
 
 ```
 docker compose build --no-cache
@@ -103,7 +118,7 @@ docker compose up -d
 
 This will pull the images for pgadmin, net10 runtime & postgres, build the project & use the docker compose override file. 
 
-NOTE: if wanting to do a release, simply force docker compose to run without the override. 
+NOTE: if wanting to do a release, simply force docker compose to run without the override, which will default to RELEASE built configuration.
 
 ```
 docker compose -f docker-compose.yml up -d --build

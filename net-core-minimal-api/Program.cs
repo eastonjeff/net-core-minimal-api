@@ -44,7 +44,13 @@ app.UseHttpsRedirection();
 app.MapGet("/customers", async ([AsParameters] GetCustomersQuery query, ICustomerRepository customerRepository) =>
 {
     var customers = await customerRepository.GetCustomersAsync(query);
-    return Results.Ok(customers);
+    var dtoCustomers = customers.Select(x => new CustomerDto()
+    {
+        Id = x.Id,
+        FirstName = x.FirstName,
+        LastName = x.LastName
+    });
+    return Results.Ok(dtoCustomers);
 })
 .AddEndpointFilter<ValidationFilter<GetCustomersQuery>>()
 .WithName("GetCustomers");

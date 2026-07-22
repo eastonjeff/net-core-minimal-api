@@ -2,6 +2,7 @@
 using net_core_minimal_api.Data;
 using net_core_minimal_api.Data.Models;
 using net_core_minimal_api.Services.Models;
+using net_core_minimal_api.Services.Repositories.Models;
 
 namespace net_core_minimal_api.Services.Repositories
 {
@@ -22,7 +23,7 @@ namespace net_core_minimal_api.Services.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<IReadOnlyCollection<Customer>> GetCustomersAsync(GetCustomersQuery query)
+        public async Task<GetCustomersRepositoryResult> GetCustomersAsync(GetCustomersQuery query)
         {
             var dbQuery = dbContext
                 .Customers
@@ -46,14 +47,16 @@ namespace net_core_minimal_api.Services.Repositories
 
             var skip = (query.PageNumber - 1) * query.PageSize;
 
+            var total = await dbQuery.CountAsync();
+
             dbQuery = dbQuery
               .OrderBy(x => x.Id)
               .Skip(skip)
               .Take(query.PageSize);
 
-            var result = await dbQuery.ToListAsync();
+            var customers = await dbQuery.ToListAsync();
 
-            return result;
+            return new GetCustomersRepositoryResult(total, customers.AsReadOnly<Customer>());
 
             
         }

@@ -10,7 +10,8 @@ namespace net_core_minimal_api.Services.Endpoints
         {
             app.MapGet("/customers", GetCustomersAsync)
                 .AddEndpointFilter<ValidationFilter<GetCustomersQuery>>()
-                .WithName("GetCustomers");
+                .WithName("GetCustomers")
+                .Produces<GetCustomersResponse>();
 
             return app;
         }
@@ -18,8 +19,8 @@ namespace net_core_minimal_api.Services.Endpoints
         public static async Task<IResult> GetCustomersAsync([AsParameters] GetCustomersQuery query, ICustomerRepository customerRepository)
         {
             var customers = await customerRepository.GetCustomersAsync(query);
-            var dtoCustomers = customers.Select(x => new CustomerDTO(x));
-            return Results.Ok(dtoCustomers);
+            var response = new GetCustomersResponse(customers.Total, customers.Customers);
+            return Results.Ok(response);
         }
     }
 }

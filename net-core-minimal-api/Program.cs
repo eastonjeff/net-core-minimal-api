@@ -1,6 +1,7 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using net_core_minimal_api.Data;
+using net_core_minimal_api.Services.BuilderExtensions;
 using net_core_minimal_api.Services.Endpoints;
 using net_core_minimal_api.Services.Models;
 using net_core_minimal_api.Services.Repositories;
@@ -26,11 +27,14 @@ builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.AddDevCorsPolicy();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseCors(DevCorsExtension.PolicyName);
     app.MapOpenApi();
     // Using this over swagger or default endpoint explorer
     // Accessible at /scalar
